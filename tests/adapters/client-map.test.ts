@@ -78,6 +78,14 @@ describe("CLIENT_NAME_TO_PLATFORM", () => {
     expect(CLIENT_NAME_TO_PLATFORM["Kimi Code"]).toBe("kimi");
   });
 
+  // Issue #1255 — sst/opencode registers itself with
+  // clientInfo.name = "opencode". Without this entry the name missed the
+  // high-confidence clientInfo tier and detection fell through to the
+  // filesystem probes.
+  it('maps "opencode" to "opencode"', () => {
+    expect(CLIENT_NAME_TO_PLATFORM["opencode"]).toBe("opencode");
+  });
+
   it("returns undefined for unknown client name", () => {
     expect(CLIENT_NAME_TO_PLATFORM["some-unknown-client"]).toBeUndefined();
   });

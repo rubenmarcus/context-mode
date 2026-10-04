@@ -127,6 +127,20 @@ describe("detectPlatform — config directory branches", () => {
     expect(signal.confidence).toBe("high");
   });
 
+  // Issue #1255 — sst/opencode sends clientInfo.name="opencode" on the
+  // MCP initialize handshake. Before the client-map entry landed, that
+  // name missed the high-confidence clientInfo tier entirely and fell
+  // through to the medium-confidence fs probes, where a co-existing
+  // ~/.gemini/antigravity-cli marker claimed the session and stats were
+  // written into the antigravity-cli store instead of ~/.config/opencode.
+  it('clientInfo "opencode" beats the ~/.gemini/antigravity-cli probe (issue #1255)', () => {
+    forceDir(resolve(home, ".gemini", "antigravity-cli"));
+    const signal = detectPlatform({ name: "opencode" });
+    expect(signal.platform).toBe("opencode");
+    expect(signal.confidence).toBe("high");
+    expect(signal.reason).toContain("clientInfo");
+  });
+
   it("CONTEXT_MODE_PLATFORM override wins over a matching config dir", () => {
     forceDir(resolve(home, ".claude"));
     process.env.CONTEXT_MODE_PLATFORM = "antigravity";

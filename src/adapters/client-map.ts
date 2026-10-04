@@ -42,4 +42,11 @@ export const CLIENT_NAME_TO_PLATFORM: Record<string, PlatformId> = {
   "kimi-code": "kimi",
   "kimi": "kimi",
   "Kimi Code": "kimi",
+  // Issue #1255 — sst/opencode announces itself as "opencode" on the MCP
+  // initialize handshake. OpenCodeAdapter already handles this platform;
+  // without the entry the name missed the high-confidence clientInfo tier
+  // and detection fell through to the filesystem probes, where a
+  // co-existing ~/.gemini/antigravity-cli marker stole the session and
+  // stats landed in the antigravity-cli store instead of ~/.config/opencode.
+  "opencode": "opencode",
 };
